@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slope & Intercept Visualizer</title>
+  <style>
+    body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 40px; }
+    .controls { margin-bottom: 20px; }
+    label { margin-right: 8px; }
+    input { width: 60px; margin-right: 16px; }
+    canvas { border: 1px solid #333; background: #fafafa; }
+  </style>
+</head>
+<body>
+  <h2>Slope & Intercept Visualizer</h2>
+  <div class="controls">
+    <label for="slope">Slope (m):</label>
+    <input type="number" id="slope" value="1" step="any">
+    <label for="intercept">Intercept (b):</label>
+    <input type="number" id="intercept" value="0" step="any">
+    <button onclick="plotLine()">Plot</button>
+  </div>
+  <canvas id="plot" width="400" height="400"></canvas>
+  <script>
+    function plotLine() {
+      const m = parseFloat(document.getElementById('slope').value);
+      const b = parseFloat(document.getElementById('intercept').value);
+      const canvas = document.getElementById('plot');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Draw axes
+      ctx.strokeStyle = '#aaa';
+      ctx.beginPath();
+      ctx.moveTo(0, 200); ctx.lineTo(400, 200); // x-axis
+      ctx.moveTo(200, 0); ctx.lineTo(200, 400); // y-axis
+      ctx.stroke();
+      // Draw line y = mx + b
+      ctx.strokeStyle = '#0074D9';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      // x from -10 to 10
+      for (let x = -200; x <= 200; x++) {
+        const px = 200 + x;
+        const py = 200 - (m * (x / 20) + b) * 20;
+        if (x === -200) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      // Draw origin
+      ctx.fillStyle = '#333';
+      ctx.beginPath();
+      ctx.arc(200, 200, 3, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+    // Initial plot
+    plotLine();
+  </script>
+</body>
+</html>
